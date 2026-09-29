@@ -36,7 +36,7 @@ def test_order_contains_order_id():
 
 
 def test_quantity_must_be_positive():
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         Order(
             customer_id="C001",
             product_id="P001",

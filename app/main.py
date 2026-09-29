@@ -67,7 +67,12 @@ def products():
     return PRODUCTS
 
 
-@app.post("/api/orders", response_model=OrderEvent, status_code=201)
+@app.post(
+    "/api/orders",
+    response_model=OrderEvent,
+    status_code=201,
+    responses={404: {"description": "Unknown product"}},
+)
 def create_order(order: Order):
     if not any(p["product_id"] == order.product_id for p in PRODUCTS):
         raise HTTPException(status_code=404, detail="Unknown product")
