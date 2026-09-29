@@ -1,7 +1,6 @@
 import re
 from datetime import datetime, timezone
 
-from flask import app
 import pytest
 from pydantic import ValidationError
 
