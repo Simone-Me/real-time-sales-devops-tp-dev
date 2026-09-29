@@ -187,6 +187,21 @@ services:
     networks:
       - data-platform
 
+  sonar-scanner:
+    image: sonarsource/sonar-scanner-cli:latest
+    container_name: sales-sonar-scanner
+    profiles:
+      - tools
+    depends_on:
+      - sonarqube
+    environment:
+      SONAR_HOST_URL: http://sonarqube:9000
+      SONAR_TOKEN: ${SONAR_TOKEN}
+    volumes:
+      - ./:/usr/src
+    networks:
+      - data-platform
+
 volumes:
   postgres-data:
   jenkins-data:
