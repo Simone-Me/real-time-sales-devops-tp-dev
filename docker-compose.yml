@@ -196,7 +196,7 @@ services:
       - sonarqube
     environment:
       SONAR_HOST_URL: http://sonarqube:9000
-      SONAR_TOKEN: ${SONAR_TOKEN}
+      SONAR_TOKEN: sqa_e23311aad99a3ea14d22163c21dbfd7899756b9d
     volumes:
       - ./:/usr/src
     networks:
