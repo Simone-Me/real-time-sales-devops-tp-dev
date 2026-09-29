@@ -38,7 +38,8 @@ pipeline {
                     python3 -m pytest tests/unit \
                       --cov=app \
                       --cov-report=xml:coverage.xml \
-                      --cov-report=term-missing
+                      --cov-report=term-missing \
+                      --junitxml=test-results-unit.xml
                 '''
             }
         }
@@ -46,8 +47,8 @@ pipeline {
         stage('Integration Tests') {
             steps {
                 sh '''
-                    echo "TODO: enable integration tests after configuring Kafka."
-                    python3 -m pytest tests/integration
+                    python3 -m pytest tests/integration \
+                      --junitxml=test-results-integration.xml
                 '''
             }
         }
@@ -61,28 +62,35 @@ pipeline {
         stage('E2E Tests') {
             steps {
                 sh '''
-                    echo "TODO: students must activate the complete E2E scenario."
-                    python3 -m pytest tests/e2e
+                    python3 -m pytest tests/e2e \
+                      --junitxml=test-results-e2e.xml
                 '''
             }
         }
 
         stage('SonarQube') {
             steps {
-                echo 'TODO: configure SonarQube Scanner / server credentials.'
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
             }
         }
 
         stage('Quality Gate') {
             steps {
-                echo 'TODO: waitForQualityGate() after SonarQube integration.'
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
 
     post {
         always {
-            junit allowEmptyResults: true, testResults: '**/test-results.xml'
+            junit allowEmptyResults: true, testResults: 'test-results-*.xml'
             archiveArtifacts allowEmptyArchive: true, artifacts: 'coverage.xml'
         }
     }
