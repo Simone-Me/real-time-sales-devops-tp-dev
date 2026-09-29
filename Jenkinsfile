@@ -4,7 +4,11 @@ pipeline {
     environment {
         PYTHON = 'python3'
         RUN_INTEGRATION_TESTS = 'true'
-        RUN_E2E_TESTS = 'true'
+        RUN_E2E_TESTS = 'true',
+        KAFKA_BOOTSTRAP_SERVERS = 'kafka:29092'
+        POSTGRES_HOST = 'postgres'
+        POSTGRES_PORT = '5432'
+        API_URL = 'http://sales-api:8000'
     }
 
     stages {
