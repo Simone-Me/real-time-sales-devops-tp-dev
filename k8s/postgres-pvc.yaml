@@ -1,0 +1,14 @@
+# Volume persistant : les données survivent à la recréation du Pod PostgreSQL.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data
+  labels:
+    app: postgres
+    app.kubernetes.io/part-of: real-time-sales
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,15 @@
+# Paramètres non secrets partagés par les composants.
+# Le mot de passe PostgreSQL est dans le Secret "postgres-secret" (créé hors Git).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sales-config
+  labels:
+    app.kubernetes.io/part-of: real-time-sales
+data:
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+  KAFKA_TOPIC: "sales.orders"
+  POSTGRES_HOST: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "sales"
+  POSTGRES_USER: "sales"

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sales-api
+  labels:
+    app: sales-api
+    app.kubernetes.io/part-of: real-time-sales
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sales-api
+  template:
+    metadata:
+      labels:
+        app: sales-api
+    spec:
+      containers:
+        - name: sales-api
+          # Image construite à partir de docker/api/Dockerfile puis chargée dans Minikube.
+          image: sales-api:tp3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: sales-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: KAFKA_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  name: sales-config
+                  key: KAFKA_TOPIC
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              memory: 256Mi
