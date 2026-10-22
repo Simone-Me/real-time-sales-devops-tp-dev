@@ -1,0 +1,16 @@
+# Accès stable à l'API à l'intérieur du cluster : http://sales-api:8000
+apiVersion: v1
+kind: Service
+metadata:
+  name: sales-api
+  labels:
+    app: sales-api
+    app.kubernetes.io/part-of: real-time-sales
+spec:
+  type: ClusterIP
+  selector:
+    app: sales-api
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
